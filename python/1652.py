@@ -34,11 +34,8 @@ class Solution:
             return result
 
 
-
-
-
-# print(Solution().decrypt([5, 7, 1, 4], 3))
-# print(Solution().decrypt([5, 7, 1, 4], 0))
+print(Solution().decrypt([5, 7, 1, 4], 3))
+print(Solution().decrypt([5, 7, 1, 4], 0))
 print(Solution().decrypt([2,4,9,3], -2))
 
 
