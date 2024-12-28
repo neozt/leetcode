@@ -1,25 +1,21 @@
-from collections import deque, Counter
 from typing import List
 
 
 class Solution:
     def resultsArray(self, nums: List[int], k: int) -> List[int]:
         result = []
-        for i, n in enumerate(nums):
-            if i < k - 1:
-                continue
-
-            is_valid = True
-            for j in range(0, k):
-                el = nums[i - k + j + 1]
-                if el != n - k + j + 1:
-                    is_valid = False
-                    break
-
-            if is_valid:
-                result.append(n)
+        consecutive_count = 0
+        for i in range(len(nums)):
+            if i > 0 and nums[i] == nums[i - 1] + 1:
+                consecutive_count += 1
             else:
-                result.append(-1)
+                consecutive_count = 1
+
+            if i >= k - 1:
+                if consecutive_count >= k:
+                    result.append(nums[i])
+                else:
+                    result.append(-1)
 
         return result
 
