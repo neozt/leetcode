@@ -1,6 +1,6 @@
 class Solution:
     def countGoodStrings(self, low: int, high: int, zero: int, one: int) -> int:
-        MOD = pow(10, 9) + 7
+        MOD = 10 ** 9 + 7
 
         dp = [0] * (high + 1) # dp[i] = number of ways that we can construct an i length string
         dp[0] = 1
@@ -10,8 +10,10 @@ class Solution:
             if i >= one:
                 dp[i] += dp[i - one] % MOD
 
-        return sum(dp[i] for i in range(low, high + 1)) % MOD
-
+        result = 0
+        for i in range(low, high + 1):
+            result = (result + dp[i]) % MOD
+        return result
 
 
 print(Solution().countGoodStrings(3, 3, 1 ,1))
