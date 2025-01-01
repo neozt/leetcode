@@ -13,8 +13,7 @@ class Solution:
 
         return best
 
-
-print(Solution().maxScore("011101"))
-print(Solution().maxScore("00111"))
-print(Solution().maxScore("1111"))
-print(Solution().maxScore("00"))
+assert Solution().maxScore("011101") == 5
+assert Solution().maxScore("00111") == 5
+assert Solution().maxScore("1111") == 3
+assert Solution().maxScore("00") == 1
