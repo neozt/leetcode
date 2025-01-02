@@ -9,7 +9,7 @@ class Solution:
         for i in range(n):
             word = words[i]
             if is_vowel(word[0]) and is_vowel(word[-1]):
-                dp[i + 1] += dp[i] + 1
+                dp[i + 1] = dp[i] + 1
             else:
                 dp[i + 1] = dp[i]
 
