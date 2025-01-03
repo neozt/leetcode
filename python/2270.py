@@ -3,15 +3,13 @@ from typing import List
 
 class Solution:
     def waysToSplitArray(self, nums: List[int]) -> int:
-        prefix_sum = [0] * len(nums)
-        prefix_sum[0] = nums[0]
-        for i in range(1, len(nums)):
-            prefix_sum[i] = prefix_sum[i-1] + nums[i]
-
+        total = sum(nums)
+        left_sum = 0
         result = 0
         for i in range(len(nums) - 1):
-            right = prefix_sum[-1] - prefix_sum[i]
-            if prefix_sum[i] >= right:
+            left_sum += nums[i]
+            right_sum = total - left_sum
+            if left_sum >= right_sum:
                 result += 1
 
         return result
