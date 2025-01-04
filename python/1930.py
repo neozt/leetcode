@@ -8,10 +8,10 @@ class Solution:
             last_occurrence[ch] = i
 
         palindromes = set()
-        for ch, first_occurrence_index in first_occurrence.items():
-            last_occurrence_index = last_occurrence[ch]
+        for ch, first_index in first_occurrence.items():
+            last_index = last_occurrence[ch]
 
-            for i in range(first_occurrence_index + 1, last_occurrence_index):
+            for i in range(first_index + 1, last_index):
                 palindromes.add(ch + s[i] + ch)
 
         return len(palindromes)
