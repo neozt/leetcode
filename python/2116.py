@@ -18,8 +18,7 @@ class Solution:
             elif s[i] == self.OPEN:
                 open_brackets.append(i)
             else:
-                # Do matching for close brackets with open/unlocked brackets
-                # Always try to match with open brackets before unlocked brackets
+                # Match close brackets with open/unlocked brackets. Prefer matching with open brackets as it provides more flexibility later on.
                 if open_brackets:
                     open_brackets.pop()
                 elif unlocked_brackets:
@@ -28,7 +27,7 @@ class Solution:
                     # Unmatched close bracket found
                     return False
 
-        # Do matching for remaining open brackets with unlocked brackets
+        # Match remaining open brackets with unlocked brackets
         while open_brackets and unlocked_brackets and open_brackets[-1] < unlocked_brackets[-1]:
             open_brackets.pop()
             unlocked_brackets.pop()
