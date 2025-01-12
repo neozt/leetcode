@@ -18,25 +18,23 @@ class Solution:
             elif s[i] == self.OPEN:
                 open_brackets.append(i)
             else:
+                # Do matching for close brackets with open/unlocked brackets
                 # Always try to match with open brackets before unlocked brackets
                 if open_brackets:
                     open_brackets.pop()
                 elif unlocked_brackets:
                     unlocked_brackets.pop()
                 else:
-                    # Unmatched close bracket, return false
+                    # Unmatched close bracket found
                     return False
 
-        while open_brackets and unlocked_brackets:
-            if open_brackets[-1] > unlocked_brackets[-1]:
-                # Unmatched open bracket, return false
-                return False
-
+        # Do matching for remaining open brackets with unlocked brackets
+        while open_brackets and unlocked_brackets and open_brackets[-1] < unlocked_brackets[-1]:
             open_brackets.pop()
             unlocked_brackets.pop()
 
         if open_brackets:
-            # Unmatched open bracket, return false
+            # Unmatched open bracket found
             return False
 
         return True
