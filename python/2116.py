@@ -10,43 +10,34 @@ class Solution:
         if len(s) % 2 != 0:
             return False
 
-        combined = ['A' if l == '0' else p for p, l in zip(s, locked)]
-
-        open_count = 0
-        any_count = 0
-        # First pass from left to check that all close parenthesis can be matched
-        for p in combined:
-            if p == self.CLOSE:
-                if not open_count and not any_count:
-                    # Unmatched close parenthesis
+        open_brackets = []
+        unlocked_brackets = []
+        for i in range(len(s)):
+            if locked[i] == self.UNLOCKED:
+                unlocked_brackets.append(i)
+            elif s[i] == self.OPEN:
+                open_brackets.append(i)
+            else:
+                # Always try to match with open brackets before unlocked brackets
+                if open_brackets:
+                    open_brackets.pop()
+                elif unlocked_brackets:
+                    unlocked_brackets.pop()
+                else:
+                    # Unmatched close bracket, return false
                     return False
 
-                if open_count: # Try match with locked open parenthesis first
-                    open_count -= 1
-                else: # Then only flexible parenthesis
-                    any_count -= 1
-            elif p == self.OPEN:
-                open_count += 1
-            else:
-                any_count += 1
+        while open_brackets and unlocked_brackets:
+            if open_brackets[-1] > unlocked_brackets[-1]:
+                # Unmatched open bracket, return false
+                return False
 
-        close_count = 0
-        any_count = 0
-        # Second pass from right to check that all close parenthesis can be matched
-        for p in reversed(combined):
-            if p == self.OPEN:
-                if not close_count and not any_count:
-                    # Unmatched open parenthesis
-                    return False
+            open_brackets.pop()
+            unlocked_brackets.pop()
 
-                if close_count: # Try match with locked close parenthesis first
-                    close_count -= 1
-                else: # Then only flexible parenthesis
-                    any_count -= 1
-            elif p == self.CLOSE:
-                close_count += 1
-            else:
-                any_count += 1
+        if open_brackets:
+            # Unmatched open bracket, return false
+            return False
 
         return True
 
