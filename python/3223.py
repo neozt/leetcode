@@ -10,4 +10,7 @@ def reduce(n: int) -> int:
     if n == 0:
         return 0
 
-    return 2 if n % 2 == 0 else 1
+    if n % 2 == 0:
+        return 2
+
+    return 1
