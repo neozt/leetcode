@@ -11,9 +11,10 @@ class Solution:
         nums_sorted = sorted(freq.keys())
 
         for n in nums_sorted:
-            while freq[n]:
+            if freq[n]:
+                count = freq[n]
                 for i in range(n, n + k):
-                    freq[i] -= 1
+                    freq[i] -= count
                     if freq[i] < 0:
                         return False
 
