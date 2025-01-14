@@ -5,12 +5,22 @@ class Solution:
     def findThePrefixCommonArray(self, A: List[int], B: List[int]) -> List[int]:
         seen_a = set()
         seen_b = set()
+        prev = 0
 
         result = []
         for a, b in zip(A, B):
+            if a == b:
+                prev += 1
+            else:
+                if a in seen_b:
+                    prev += 1
+                if b in seen_a:
+                    prev += 1
+
             seen_a.add(a)
             seen_b.add(b)
-            result.append(len(seen_a.intersection(seen_b)))
+
+            result.append(prev)
 
         return result
 
