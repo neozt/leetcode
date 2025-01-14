@@ -3,24 +3,15 @@ from typing import List
 
 class Solution:
     def findThePrefixCommonArray(self, A: List[int], B: List[int]) -> List[int]:
-        seen_a = set()
-        seen_b = set()
-        prev = 0
+        bitmap_a = 0
+        bitmap_b = 0
 
         result = []
         for a, b in zip(A, B):
-            if a == b:
-                prev += 1
-            else:
-                if a in seen_b:
-                    prev += 1
-                if b in seen_a:
-                    prev += 1
+            bitmap_a = bitmap_a | (1 << a)
+            bitmap_b = bitmap_b | (1 << b)
 
-            seen_a.add(a)
-            seen_b.add(b)
-
-            result.append(prev)
+            result.append((bitmap_a & bitmap_b).bit_count())
 
         return result
 
