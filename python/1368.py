@@ -6,10 +6,10 @@ from typing import List
 class Solution:
     def minCost(self, grid: List[List[int]]) -> int:
         directions = {
-            1: [0, 1],
-            2: [0, -1],
-            3: [1, 0],
-            4: [-1, 0],
+            1: (0, 1),
+            2: (0, -1),
+            3: (1, 0),
+            4: (-1, 0),
         }
 
         m = len(grid)
