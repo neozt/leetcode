@@ -6,26 +6,20 @@ class Solution:
     def lexicographicallySmallestArray(self, nums: List[int], limit: int) -> List[int]:
         nums_sorted = sorted(nums)
         nums_to_group = {nums_sorted[0]: 0}
-        group_to_nums = [deque([nums_sorted[0]])]
+        groups = [deque([nums_sorted[0]])]
 
         for i in range(1, len(nums_sorted)):
-            if nums_sorted[i] - nums_sorted[i - 1] <= limit:
-                # Put into same group
-                group = nums_to_group[nums_sorted[i-1]]
-                nums_to_group[nums_sorted[i]] = group
-                group_to_nums[group].append(nums_sorted[i])
+            if nums_sorted[i] - nums_sorted[i - 1] > limit:
+                groups.append(deque())
 
-            else:
-                # Add new group
-                group = nums_to_group[nums_sorted[i-1]] + 1
-                nums_to_group[nums_sorted[i]] = group
-                group_to_nums.append(deque([nums_sorted[i]]))
+            nums_to_group[nums_sorted[i]] = len(groups) - 1
+            groups[-1].append(nums_sorted[i])
 
         result = []
         for num in nums:
             # Replace with smallest element from same group
             group = nums_to_group[num]
-            result.append(group_to_nums[group].popleft())
+            result.append(groups[group].popleft())
 
         return result
 
