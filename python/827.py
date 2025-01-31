@@ -1,33 +1,31 @@
-from collections import defaultdict
 from typing import List
 
 class UnionFind:
-    def __init__(self, grid):
-        self.rows = len(grid)
-        self.cols = len(grid)
-        self.parent = [[(row, col, grid[row][col]) for col in range(self.cols)] for row in range(self.rows)]
+    def __init__(self, n):
+        self.parent = [i for i in range(n)]
+        self.island_size = [1 for _ in range(n)]
 
-    def find(self, row, col):
-        pr, pc, _ = self.parent[row][col]
-        ppr, ppc, _ = self.parent[pr][pc]
-        while (pr, pc) != (ppr, ppc):
-            self.parent[row][col] = self.parent[pr][pc]
-            pr, pc, _ = self.parent[row][col]
-            ppr, ppc, _ = self.parent[pr][pc]
+    def find(self, n):
+        if self.parent[n] == n:
+            return n
+        self.parent[n] = self.find(self.parent[n])
+        return self.parent[n]
 
-        return self.parent[pr][pc]
+    def union(self, n1, n2):
+        p1 = self.find(n1)
+        p2 = self.find(n2)
 
-    def union(self, row1, col1, row2, col2):
-        p1_row, p1_col, p1_size = self.find(row1, col1)
-        p2_row, p2_col, p2_size = self.find(row2, col2)
-        new_size = p1_size + p2_size if (p1_row, p1_col) != (p2_row, p2_col) else max(p1_size, p2_size)
-        self.parent[p2_row][p2_col] = p1_row, p1_col, -1 # Set parent of node 2 to parent of node 1
-        self.parent[p1_row][p1_col] = p1_row, p1_col, new_size # Update size of node 1 parent
+        if p1 == p2:
+            return
 
-    def maximum(self):
-        if not self.rows and not self.cols:
-            return 0
-        return max(self.parent[row][col][2] for col in range(self.cols) for row in range(self.rows))
+        p_smaller = p1
+        p_larger = p2
+        if self.island_size[p1] > self.island_size[p2]:
+            p_smaller = p2
+            p_larger = p1
+
+        self.parent[p_smaller] = p_larger
+        self.island_size[p_larger] += self.island_size[p_smaller]
 
 class Solution:
     LEFT_AND_UP_DIRECTIONS = [(0, -1), (-1, 0)]
@@ -35,7 +33,7 @@ class Solution:
 
     def largestIsland(self, grid: List[List[int]]) -> int:
         n = len(grid)
-        uf = UnionFind(grid)
+        uf = UnionFind(n * n)
 
         # Group all land masses
         for row in range(n):
@@ -48,10 +46,13 @@ class Solution:
                     if nr < 0 or nr >= n or nc < 0 or nc >= n:
                         continue
 
-                    if grid[nr][nc] == 1:
-                        uf.union(nr, nc, row, col)
+                    n_old = row * n + col
+                    n_new = nr * n + nc
 
-        best = uf.maximum()
+                    if grid[nr][nc] == 1:
+                        uf.union(n_old, n_new)
+
+        best = max(uf.island_size[r * n + c] for r in range(n) for c in range(n))
 
         # Turn each 0 to 1, combine with neighboring land masses, and find new area
         for row in range(n):
@@ -65,9 +66,11 @@ class Solution:
                     nr, nc = row + dr, col + dc
                     if nr < 0 or nr >= n or nc < 0 or nc >= n or grid[nr][nc] == 0:
                         continue
-                    pr, pc, p_size = uf.find(nr, nc)
+                    n_new = nr * n + nc
+                    n_parent = uf.find(n_new)
+                    pr, pc = n_parent // n, n_parent % n
                     if (pr, pc) not in added:
-                        size += p_size
+                        size += uf.island_size[pr * n + pc]
                         added.add((pr, pc))
 
                 best = max(best, size)
