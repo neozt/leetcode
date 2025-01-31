@@ -1,28 +1,38 @@
 from typing import List
 
+class CoordinatesMapper:
+    def __init__(self, rows, cols):
+        self.rows = rows
+        self.cols = cols
+
+    def to_index(self, row, col):
+        return row * self.cols + col
+
 class UnionFind:
     def __init__(self, n):
         self.parent = [i for i in range(n)]
         self.island_size = [1 for _ in range(n)]
 
-    def find(self, n):
+    def find_root(self, n):
         if self.parent[n] == n:
             return n
-        self.parent[n] = self.find(self.parent[n])
+        self.parent[n] = self.find_root(self.parent[n])
         return self.parent[n]
 
+    def find_size(self, n):
+        parent = self.find_root(n)
+        return self.island_size[parent]
+
     def union(self, n1, n2):
-        p1 = self.find(n1)
-        p2 = self.find(n2)
+        p1 = self.find_root(n1)
+        p2 = self.find_root(n2)
 
         if p1 == p2:
             return
 
-        p_smaller = p1
-        p_larger = p2
-        if self.island_size[p1] > self.island_size[p2]:
-            p_smaller = p2
-            p_larger = p1
+        is_p2_smaller = self.island_size[p1] > self.island_size[p2]
+        p_smaller = p2 if is_p2_smaller else p1
+        p_larger = p1 if is_p2_smaller else p2
 
         self.parent[p_smaller] = p_larger
         self.island_size[p_larger] += self.island_size[p_smaller]
@@ -34,6 +44,7 @@ class Solution:
     def largestIsland(self, grid: List[List[int]]) -> int:
         n = len(grid)
         uf = UnionFind(n * n)
+        coordinates_mapper = CoordinatesMapper(n, n)
 
         # Group all land masses
         for row in range(n):
@@ -46,11 +57,8 @@ class Solution:
                     if nr < 0 or nr >= n or nc < 0 or nc >= n:
                         continue
 
-                    n_old = row * n + col
-                    n_new = nr * n + nc
-
                     if grid[nr][nc] == 1:
-                        uf.union(n_old, n_new)
+                        uf.union(coordinates_mapper.to_index(row, col), coordinates_mapper.to_index(nr, nc))
 
         best = max(uf.island_size[r * n + c] for r in range(n) for c in range(n))
 
@@ -66,12 +74,10 @@ class Solution:
                     nr, nc = row + dr, col + dc
                     if nr < 0 or nr >= n or nc < 0 or nc >= n or grid[nr][nc] == 0:
                         continue
-                    n_new = nr * n + nc
-                    n_parent = uf.find(n_new)
-                    pr, pc = n_parent // n, n_parent % n
-                    if (pr, pc) not in added:
-                        size += uf.island_size[pr * n + pc]
-                        added.add((pr, pc))
+                    n_parent = uf.find_root(coordinates_mapper.to_index(nr, nc))
+                    if n_parent not in added:
+                        size += uf.find_size(n_parent)
+                        added.add(n_parent)
 
                 best = max(best, size)
 
