@@ -60,7 +60,7 @@ class Solution:
                     if grid[nr][nc] == 1:
                         uf.union(coordinates_mapper.to_index(row, col), coordinates_mapper.to_index(nr, nc))
 
-        best = max(uf.island_size[r * n + c] for r in range(n) for c in range(n))
+        best = max(uf.island_size[coordinates_mapper.to_index(r, c)] for r in range(n) for c in range(n))
 
         # Turn each 0 to 1, combine with neighboring land masses, and find new area
         for row in range(n):
