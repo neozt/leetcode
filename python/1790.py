@@ -8,7 +8,10 @@ class Solution:
                 if len(diff_indexes) > 2:
                     return False
 
-        return not diff_indexes or (s1[diff_indexes[0]] == s2[diff_indexes[1]] and s1[diff_indexes[1]] == s2[diff_indexes[0]])
+        if len(diff_indexes) == 2:
+            return s1[diff_indexes[0]] == s2[diff_indexes[1]] and s1[diff_indexes[1]] == s2[diff_indexes[0]]
+
+        return len(diff_indexes) == 0
 
 
 print(Solution().areAlmostEqual('bank', 'kanb'))
