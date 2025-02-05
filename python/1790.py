@@ -1,24 +1,15 @@
 class Solution:
     def areAlmostEqual(self, s1: str, s2: str) -> bool:
-        have_swapped = False
-        diff_index = None
+        diff_indexes = []
 
         for i in range(len(s1)):
             if s1[i] != s2[i]:
-                if have_swapped:
+                diff_indexes.append(i)
+                if len(diff_indexes) > 2:
                     return False
 
-                if diff_index is None:
-                    diff_index = i
-                else:
-                    # Try swap i and diff_index
-                    if s1[diff_index] == s2[i] and s1[i] == s2[diff_index]:
-                        diff_index = None
-                        have_swapped = True
-                    else:
-                        return False
+        return not diff_indexes or (s1[diff_indexes[0]] == s2[diff_indexes[1]] and s1[diff_indexes[1]] == s2[diff_indexes[0]])
 
-        return diff_index is None
 
 print(Solution().areAlmostEqual('bank', 'kanb'))
 print(Solution().areAlmostEqual('attack', 'defend'))
