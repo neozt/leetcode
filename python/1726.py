@@ -12,10 +12,10 @@ class Solution:
                 freq[product] += 1
 
         result = 0
-        for count in freq.values():
-            # We have `count` groups, any two of them will form a valid "pair".
+        for n in freq.values():
+            # We have `n` groups, any two of them will form a valid "pair", so we have nP2 combinations
             # We multiply by 2 twice because given a * b = c * d, a and b, and c and d are interchangeable
-            result += math.perm(count, 2) * 2 * 2
+            result += math.perm(n, 2) * 2 * 2
 
         return result
 
