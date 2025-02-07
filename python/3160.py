@@ -5,13 +5,13 @@ from typing import List
 class Solution:
     def queryResults(self, limit: int, queries: List[List[int]]) -> List[int]:
         freq = defaultdict(int)
-        colors = [None] * (limit + 1)
+        colors = {}
         distinct_colors = 0
         result = []
 
         for i, color in queries:
-            prev_color = colors[i]
-            if prev_color:
+            if i in colors:
+                prev_color = colors[i]
                 freq[prev_color] -= 1
                 if freq[prev_color] == 0:
                     distinct_colors -= 1
