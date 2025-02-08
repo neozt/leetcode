@@ -1,4 +1,4 @@
-import bisect
+import heapq
 from collections import defaultdict
 
 
@@ -9,17 +9,18 @@ class NumberContainers:
         self.number_to_indices = defaultdict(list)
 
     def change(self, index: int, number: int) -> None:
-        if index in self.numbers:
-            previous_number = self.numbers[index]
-            remove_index = bisect.bisect_left(self.number_to_indices[previous_number], index)
-            self.number_to_indices[previous_number].pop(remove_index)
-
-        bisect.insort_right(self.number_to_indices[number], index)
+        heapq.heappush(self.number_to_indices[number], index)
         self.numbers[index] = number
 
     def find(self, number: int) -> int:
-        return self.number_to_indices[number][0] if self.number_to_indices[number] else -1
+        indices = self.number_to_indices[number]
+        while indices and self.numbers[indices[0]] != number:
+            heapq.heappop(indices)
 
+        if not indices:
+            return -1
+
+        return indices[0]
 
 obj = NumberContainers()
 print(obj.find(10))
