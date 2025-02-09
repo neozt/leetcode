@@ -7,15 +7,17 @@ class Solution:
         # j - i != nums[j] - nums[i]
         # => j != nums[j] - nums[i] + i
         # => j - nums[j] != i - nums[i]
-        result = 0
-        total = 0
+        n = len(nums)
         freq = defaultdict(int) # stores count of (i - nums[i])
+        good_pairs = 0
         for i in range(len(nums)):
-            result += total - freq[i - nums[i]]
-            freq[i - nums[i]] += 1
-            total += 1
+            temp = i - nums[i]
+            good_pairs += freq[temp]
+            freq[temp] += 1
 
-        return result
+        total_pairs = (n * (n - 1)) // 2 # 0 + 1 + ... + (n - 1)
+
+        return total_pairs - good_pairs
 
 print(Solution().countBadPairs([4,1,3,3]))
 print(Solution().countBadPairs([1,2,3,4,5]))
