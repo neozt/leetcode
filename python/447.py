@@ -13,11 +13,10 @@ class Solution:
 
                 p1 = points[i]
                 p2 = points[j]
-
                 dx = p1[0] - p2[0]
                 dy = p1[1] - p2[1]
-                distance = dx * dx + dy * dy # Omit square root as we are only interested in the relative magnitude
 
+                distance = dx * dx + dy * dy # Omit square root as we are only interested in the relative magnitude
                 freq[distance] += 1
 
             for f in freq.values():
