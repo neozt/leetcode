@@ -14,9 +14,9 @@ class Solution:
                 p1 = points[i]
                 p2 = points[j]
 
-                delta_x = p1[0] - p2[0]
-                delta_y = p1[1] - p2[1]
-                distance = delta_x * delta_x + delta_y * delta_y # Omit square root as we are only interested in the relative magnitude
+                dx = p1[0] - p2[0]
+                dy = p1[1] - p2[1]
+                distance = dx * dx + dy * dy # Omit square root as we are only interested in the relative magnitude
 
                 freq[distance] += 1
 
