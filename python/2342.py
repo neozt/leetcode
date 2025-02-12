@@ -17,7 +17,7 @@ class Solution:
 def calculate_digits_sum(num: int) -> int:
     result = 0
     while num:
-        div, mod = divmod(num ,10)
+        div, mod = divmod(num, 10)
         result += mod
         num = div
 
