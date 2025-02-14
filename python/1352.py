@@ -1,24 +1,24 @@
 class ProductOfNumbers:
 
     def __init__(self):
-        self.products = [1]
-        self.previous_zero_index = [0]
+        self.prefix_products = [1]
 
+    def size(self):
+        # Return how many non-zero numbers encountered since the last 0
+        return len(self.prefix_products) - 1
 
     def add(self, num: int) -> None:
         if num == 0:
-            self.products.append(1)
-            self.previous_zero_index.append(len(self.previous_zero_index))
+            self.prefix_products = [1]
         else:
-            self.products.append(self.products[-1] * num)
-            self.previous_zero_index.append(self.previous_zero_index[-1])
+            self.prefix_products.append(self.prefix_products[-1] * num)
 
     def getProduct(self, k: int) -> int:
-        index_from_right = len(self.products) - k
-        if index_from_right <= self.previous_zero_index[-1]:
+        if k > self.size():
+            # Includes a 0 in the product
             return 0
 
-        return self.products[-1] // self.products[index_from_right - 1]
+        return self.prefix_products[-1] // self.prefix_products[self.size() - k]
 
 productOfNumbers = ProductOfNumbers()
 productOfNumbers.add(3)        # [3]
@@ -31,7 +31,3 @@ print(productOfNumbers.getProduct(3)) # return 40. The product of the last 3 num
 print(productOfNumbers.getProduct(4)) # return 0. The product of the last 4 numbers is 0 * 2 * 5 * 4 = 0
 productOfNumbers.add(8)        # [3,0,2,5,4,8]
 print(productOfNumbers.getProduct(2)) # return 32. The product of the last 2 numbers is 4 * 8 = 32
-
-
-productOfNumbers2 = ProductOfNumbers()
-productOfNumbers2.add(3)
