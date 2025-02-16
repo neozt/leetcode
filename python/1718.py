@@ -15,7 +15,7 @@ class Solution:
                 return backtrack(index + 1)
 
             # Try to fill with a candidate and check recursively if it will be valid
-            for candidate in candidates:
+            for candidate_index, candidate in enumerate(candidates):
                 if (
                         candidate == 1
                         or (index + candidate < len(result) and result[index + candidate] == -1) # Check if can fill with candidate
@@ -23,8 +23,7 @@ class Solution:
                     result[index] = candidate
                     if candidate != 1:
                         result[index + candidate] = candidate
-                    position = candidates.index(candidate) # Store position in case undo is required
-                    candidates.pop(position)
+                    candidates.pop(candidate_index)
 
                     if backtrack(index + 1):
                         return True
@@ -33,7 +32,7 @@ class Solution:
                     result[index] = -1
                     if candidate != 1:
                         result[index + candidate] = -1
-                    candidates.insert(position, candidate)
+                    candidates.insert(candidate_index, candidate)
 
             return False
 
