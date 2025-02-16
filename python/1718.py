@@ -4,7 +4,7 @@ from typing import List
 class Solution:
     def constructDistancedSequence(self, n: int) -> List[int]:
         result = [-1] * ((n - 1) * 2 + 1)
-        candidates = [i for i in range(n, 0, -1)]
+        candidates = [i for i in range(n, 0, -1)] # Greedy algorithm: Should always try to fill with the largest candidate first
 
         def backtrack(index: int) -> bool:
             if index == len(result):
@@ -14,25 +14,26 @@ class Solution:
                 # Already filled, go next
                 return backtrack(index + 1)
 
+            # Try to fill with a candidate and check recursively if it will be valid
             for candidate in candidates:
-                if candidate == 1:
+                if (
+                        candidate == 1
+                        or (index + candidate < len(result) and result[index + candidate] == -1) # Check if can fill with candidate
+                ):
                     result[index] = candidate
-                    position = candidates.index(candidate)
+                    if candidate != 1:
+                        result[index + candidate] = candidate
+                    position = candidates.index(candidate) # Store position in case undo is required
                     candidates.pop(position)
+
                     if backtrack(index + 1):
                         return True
-                    # backtrack
+
+                    # Undo changes
                     result[index] = -1
+                    if candidate != 1:
+                        result[index + candidate] = -1
                     candidates.insert(position, candidate)
-                else:
-                    if index + candidate < len(result) and result[index + candidate] == -1:
-                        result[index + candidate] = result[index] = candidate
-                        position = candidates.index(candidate)
-                        candidates.pop(position)
-                        if backtrack(index + 1):
-                            return True
-                        result[index + candidate] = result[index] = -1
-                        candidates.insert(position, candidate)
 
             return False
 
