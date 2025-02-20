@@ -3,16 +3,12 @@ from typing import List
 
 class Solution:
     def findDifferentBinaryString(self, nums: List[str]) -> str:
-        numbers = set()
+        result = []
 
-        for num in nums:
-            numbers.add(int(num, 2))
+        for i, num in enumerate(nums):
+            result.append('1' if num[i] == '0' else '0')
 
-        for i in range(2 ** len(nums)):
-            if i not in numbers:
-                return bin(i)[2:].zfill(len(nums))
-
-        raise Exception()
+        return ''.join(result)
 
 print(Solution().findDifferentBinaryString(["01","10"]))
 print(Solution().findDifferentBinaryString(["00","01"]))
