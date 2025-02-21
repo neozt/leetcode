@@ -12,29 +12,25 @@ class FindElements:
 
     def __init__(self, root: Optional[TreeNode]):
         self.values = set()
-
-        if not root:
-            return
-
-        self.values.add(0)
-        self.buildTree(root.left, 0, None)
-        self.buildTree(root.right, None, 0)
-
+        self.buildTree(root, None, None)
 
     def find(self, target: int) -> bool:
         return target in self.values
 
-    def buildTree(self, node: TreeNode, leftParentValue: Optional[int], rightParentValue: Optional[int]) -> None:
+    def buildTree(self, node: TreeNode, left_parent_value: Optional[int], right_parent_value: Optional[int]) -> None:
         if not node:
             return
 
-        value = 2 * rightParentValue + 2 if leftParentValue is None else 2 * leftParentValue + 1
+        if left_parent_value is None and right_parent_value is None:
+            value = 0
+        elif left_parent_value is not None:
+            value = left_parent_value * 2 + 1
+        else:
+            value = right_parent_value * 2 + 2
+
         self.values.add(value)
         self.buildTree(node.left, value, None)
         self.buildTree(node.right, None, value)
-
-
-
 
 
 # Your FindElements object will be instantiated and called as such:
