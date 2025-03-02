@@ -8,25 +8,17 @@ class Solution:
         idx1 = idx2 = 0
 
         while idx1 < len(nums1) or idx2 < len(nums2):
-            if (idx1 < len(nums1) and idx2 < len(nums2)):
-                if nums1[idx1][0] < nums2[idx2][0]:
-                    candidate = nums1[idx1]
-                    idx1 += 1
-                else:
-                    candidate = nums2[idx2]
-                    idx2 += 1
-
-            elif idx1 < len(nums1):
-                candidate = nums1[idx1]
+            both_inbounds = idx1 < len(nums1) and idx2 < len(nums2)
+            if both_inbounds and nums1[idx1][0] == nums2[idx2][0]:
+                result.append([nums1[idx1][0], nums1[idx1][1] + nums2[idx2][1]])
+                idx1 += 1
+                idx2 += 1
+            elif idx2 >= len(nums2) or (both_inbounds and nums1[idx1][0] < nums2[idx2][0]):
+                result.append(nums1[idx1])
                 idx1 += 1
             else:
-                candidate = nums2[idx2]
+                result.append(nums2[idx2])
                 idx2 += 1
-
-            if result and result[-1][0] == candidate[0]:
-                result[-1] = [result[-1][0], result[-1][1] + candidate[1]]
-            else:
-                result.append([candidate[0], candidate[1]])
 
         return result
 
