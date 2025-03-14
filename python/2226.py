@@ -1,4 +1,3 @@
-import math
 from typing import List
 
 
@@ -8,7 +7,7 @@ class Solution:
         right = max(candies)
 
         while left < right:
-            mid = math.ceil((left + right) / 2)
+            mid = (left + right + 1) // 2
 
             if can_distribute_candies(candies, k, mid):
                 left = mid
