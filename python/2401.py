@@ -3,19 +3,20 @@ from typing import List
 
 class Solution:
     def longestNiceSubarray(self, nums: List[int]) -> int:
+        # Sliding window
+        used = 0 # keep track of which bit already used in current window
         longest = 0
-        for i in range(len(nums)):
-            seen = 0
-            for j in range(i, len(nums)):
-                current = nums[j]
-                if current & seen:
-                    break
+        start = 0
 
-                seen = current | seen
-                longest = max(longest, j - i + 1)
+        for end in range(len(nums)):
+            while used & nums[end]:
+                used = used ^ nums[start]
+                start += 1
+
+            used = used | nums[end]
+            longest = max(longest, end - start + 1)
 
         return longest
-
 
 print(Solution().longestNiceSubarray([1,3,8,48,10]))
 print(Solution().longestNiceSubarray([3,1,5,11,13]))
