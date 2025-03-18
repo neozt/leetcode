@@ -1,31 +1,17 @@
-from typing import List, Set
+from typing import List
 
 
 class Solution:
     def longestNiceSubarray(self, nums: List[int]) -> int:
-        def convert_to_bit_set(num: int) -> Set[int]:
-            index = 0
-            result = set()
-            while num:
-                if num & 1:
-                    result.add(index)
-
-                index += 1
-                num = num >> 1
-
-            return result
-
-        bit_sets = [convert_to_bit_set(num) for num in nums]
-
         longest = 0
-        for i in range(len(bit_sets)):
-            seen = set()
-            for j in range(i, len(bit_sets)):
-                current = bit_sets[j]
-                if seen.intersection(current):
+        for i in range(len(nums)):
+            seen = 0
+            for j in range(i, len(nums)):
+                current = nums[j]
+                if current & seen:
                     break
 
-                seen = seen.union(current)
+                seen = current | seen
                 longest = max(longest, j - i + 1)
 
         return longest
