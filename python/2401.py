@@ -6,15 +6,17 @@ class Solution:
         # Sliding window
         used = 0 # keep track of which bit already used in current window
         longest = 0
-        start = 0
+        start = end = 0
 
-        for end in range(len(nums)):
+        while end < len(nums):
             while used & nums[end]:
                 used = used ^ nums[start]
                 start += 1
 
-            used = used | nums[end]
+            used = used ^ nums[end]
             longest = max(longest, end - start + 1)
+
+            end += 1
 
         return longest
 
