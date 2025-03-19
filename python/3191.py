@@ -7,8 +7,9 @@ class Solution:
         for i in range(len(nums) - 2):
             if nums[i] == 0:
                 flips += 1
-                for j in range(i, i + 3):
-                    nums[j] = 0 if nums[j] == 1 else 1
+                nums[i] ^= 1
+                nums[i + 1] ^= 1
+                nums[i + 2] ^= 1
 
         if nums[-1] == 1 and nums[-2] == 1:
             return flips
