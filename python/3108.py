@@ -4,7 +4,7 @@ class UnionFind:
     def __init__(self, n: int):
         self.parent = [i for i in range(n)]
 
-    def union(self, u: int, v:int):
+    def union(self, u: int, v: int):
         self.parent[self.find(u)] = self.find(v)
 
 
@@ -21,11 +21,11 @@ class Solution:
         for u, v, w in edges:
             uf.union(u, v)
 
-        group_cost = {}
+        group_cost = [None] * n
 
         for u, v, w in edges:
             parent = uf.find(u)
-            current_cost = group_cost.get(parent, w)
+            current_cost = group_cost[parent] if group_cost[parent] is not None else w
             new_cost = current_cost & w
             group_cost[parent] = new_cost
 
@@ -34,7 +34,7 @@ class Solution:
             if uf.find(u) != uf.find(v):
                 result.append(-1)
             else:
-                result.append(group_cost.get(uf.find(u)))
+                result.append(group_cost[uf.find(u)])
 
         return result
 
