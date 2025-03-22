@@ -39,16 +39,10 @@ class Solution:
         for i in range(n):
             components[uf.find(i)].append(i)
 
-        # Create adjacency list, but we're only interested in the number of edges a vertex have, which is required for next step
-        adj = defaultdict(int)
-        for u, v in edges:
-            adj[u] += 1
-
         # Count how many vertices there are in a component
-        component_to_vertex_count = defaultdict(int)
-        for component, component_edges in components.items():
-            for component_edge in component_edges:
-                component_to_vertex_count[component] += adj[component_edge]
+        edge_count = defaultdict(int)
+        for u, v in edges:
+            edge_count[uf.find(u)] += 1
 
         # A component is complete if and only if there are m(m-1)/2 edges between the vertexes
         # Eg, for a component with m = 1 vertices, we need 0 edges for it to be complete
@@ -57,10 +51,13 @@ class Solution:
         # for m = 4, 0 + 1 + 2 + 3 edges required
         # Therefore, we can use arithmetic sequence formula to calculate the edges required given m vertices.
         result = 0
-        for component, component_edges in components.items():
-            m = len(component_edges)
-            required = m * (m - 1) // 2
-            if required == component_to_vertex_count[component]:
+        for i in range(n):
+            if i != uf.find(i):
+                # We are looping through component, so we only look at the representatives
+                continue
+
+            m = uf.rank[i]
+            if (m * (m - 1) // 2) == edge_count[i]:
                 result += 1
 
         return result
