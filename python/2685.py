@@ -8,18 +8,25 @@ class UnionFind:
         self.rank = [1] * n
 
     def find(self, u: int):
-        while self.parent[u] != self.parent[self.parent[u]]:
-            self.parent[u] = self.parent[self.parent[u]]
+        if self.parent[u] == u:
+            return u
+
+        self.parent[u] = self.find(self.parent[u])
         return self.parent[u]
 
     def union(self, u: int, v: int):
         parent_u = self.find(u)
         parent_v = self.find(v)
-        if parent_v > parent_u:
-            parent_u, parent_v = parent_v, parent_u
 
-        self.parent[parent_v] = parent_u
-        self.rank[parent_u] += self.rank[parent_v]
+        if parent_u == parent_v:
+            return
+
+        if parent_v > parent_u:
+            self.parent[parent_u] = parent_v
+            self.rank[parent_v] += self.rank[parent_u]
+        else :
+            self.parent[parent_v] = parent_u
+            self.rank[parent_u] += self.rank[parent_v]
 
 class Solution:
     def countCompleteComponents(self, n: int, edges: List[List[int]]) -> int:
