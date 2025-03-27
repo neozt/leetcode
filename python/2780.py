@@ -4,15 +4,15 @@ from typing import List
 
 class Solution:
     def minimumIndex(self, nums: List[int]) -> int:
-        dominant, dominant_count = find_dominant(nums)
+        x, f = find_dominant(nums)
 
-        current_count = 0
-
+        f1 = 0
         for i, num in enumerate(nums[0:-1]):
-            if num == dominant:
-                current_count += 1
+            if num == x:
+                f1 += 1
 
-            if (current_count > (i + 1) // 2) and ((dominant_count - current_count) > (len(nums) - i - 1) // 2):
+            f2 = f - f1
+            if (f1 > (i + 1) // 2) and (f2 > (len(nums) - i - 1) // 2):
                 return i
 
         return -1
