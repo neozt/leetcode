@@ -1,23 +1,20 @@
-from functools import cache
 from typing import List
 
 
 class Solution:
+    # Bottom up DP
+    # Time: O(N)
+    # Space: O(N)
     def mostPoints(self, questions: List[List[int]]) -> int:
-        @cache
-        def helper(idx: int) -> int:
-            if idx >= len(questions):
-                return 0
-
-            points, brainpower = questions[idx]
-            option1 = points + helper(idx + brainpower + 1)
-            option2 = helper(idx + 1)
-            return max(
-                option1,
-                option2
+        dp = [0] * len(questions)
+        for i in range(len(questions) - 1, -1, -1):
+            points, brainpower = questions[i]
+            dp[i] = max(
+                dp[i + 1] if i + 1 < len(questions) else 0,
+                points + (dp[i + brainpower + 1] if i + brainpower + 1 < len(questions) else 0)
             )
 
-        return helper(0)
+        return dp[0]
 
 
 print(Solution().mostPoints([[3,2],[4,3],[4,4],[2,5]]))
