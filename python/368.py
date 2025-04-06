@@ -5,6 +5,7 @@ class Solution:
     def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
         nums.sort()
 
+        # dp[i] is the length of longest chain starting from i
         dp = [1] * len(nums)
         prev = [-1] * len(nums)
         best =  0
@@ -18,6 +19,7 @@ class Solution:
             if dp[i] > dp[best]:
                 best = i
 
+        # Reconstruct the longest chain
         current = best
         longest = []
         while current != -1:
