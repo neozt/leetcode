@@ -5,20 +5,19 @@ class Solution:
     def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
         nums.sort()
 
-        def backtrack(index: int, current_path: List[int]) -> List[int]:
-            if index == len(nums):
-                return current_path.copy()
+        dp = [[nums[i]] for i in range(len(nums))]
 
-            skip = backtrack(index + 1, current_path)
-            take = []
-            if len(current_path) == 0 or nums[index] % current_path[-1] == 0:
-                current_path.append(nums[index])
-                take = backtrack(index + 1, current_path)
-                current_path.pop()
+        for i in range(len(nums) - 2, -1, -1):
+            for j in range(i + 1, len(nums)):
+                if nums[j] % nums[i] == 0 and len(dp[j]) + 1 > len(dp[i]):
+                    dp[i] = [nums[i]] + dp[j]
 
-            return skip if len(skip) > len(take) else take
+        longest = []
+        for l in dp:
+            if len(l) > len(longest):
+                longest = l
 
-        return backtrack(0, [])
+        return longest
 
 print(Solution().largestDivisibleSubset([1,2,3]))
 print(Solution().largestDivisibleSubset([1,2,4,8]))
