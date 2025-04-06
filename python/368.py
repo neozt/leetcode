@@ -5,16 +5,24 @@ class Solution:
     def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
         nums.sort()
 
-        dp = [[nums[i]] for i in range(len(nums))]
+        dp = [1] * len(nums)
+        prev = [-1] * len(nums)
+        best =  0
 
-        longest = []
         for i in range(len(nums) - 1, -1, -1):
             for j in range(i + 1, len(nums)):
-                if nums[j] % nums[i] == 0 and len(dp[j]) + 1 > len(dp[i]):
-                    dp[i] = [nums[i]] + dp[j]
+                if nums[j] % nums[i] == 0 and dp[j] + 1 > dp[i]:
+                    dp[i] = dp[j] + 1
+                    prev[i] = j
 
-            if len(dp[i]) > len(longest):
-                longest = dp[i]
+            if dp[i] > dp[best]:
+                best = i
+
+        current = best
+        longest = []
+        while current != -1:
+            longest.append(nums[current])
+            current = prev[current]
 
         return longest
 
