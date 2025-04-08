@@ -3,22 +3,21 @@ from typing import List
 
 class Solution:
     def minimumOperations(self, nums: List[int]) -> int:
-        array_start = 0
-        operations = 0
-        i = 0
         distinct_elements = set()
+        operations = 0
+        truncated_start = 0
+        i = 0
         while i < len(nums):
             while nums[i] in distinct_elements:
-                distinct_elements.remove(nums[array_start])
-                if array_start + 1 < len(nums) and nums[array_start + 1] in distinct_elements:
-                    distinct_elements.remove(nums[array_start + 1])
-                if array_start + 2 < len(nums) and nums[array_start + 2] in distinct_elements:
-                    distinct_elements.remove(nums[array_start + 2])
-                array_start += 3
+                for j in range(3):
+                    if truncated_start + j >= i:
+                        break
+                    distinct_elements.remove(nums[truncated_start + j])
+                truncated_start += 3
                 operations += 1
 
-            if array_start > i:
-                i = array_start
+            if truncated_start > i:
+                i = truncated_start
             else:
                 distinct_elements.add(nums[i])
                 i += 1
