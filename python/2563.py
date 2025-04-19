@@ -6,15 +6,15 @@ class Solution:
     def countFairPairs(self, nums: List[int], lower: int, upper: int) -> int:
         nums.sort()
 
-        return self.lower_bound(nums, upper + 1) - self.lower_bound(nums, lower)
+        return self.count_pairs_under_max_sum(nums, upper + 1) - self.count_pairs_under_max_sum(nums, lower)
 
-    def lower_bound(self, nums, value):
+    def count_pairs_under_max_sum(self, nums: List[int], max_sum: int) -> int:
         left = 0
         right = len(nums) - 1
         result = 0
         while left < right:
             sum = nums[left] + nums[right]
-            if sum < value:
+            if sum < max_sum:
                 result += right - left
                 left += 1
             else:
