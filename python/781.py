@@ -6,12 +6,12 @@ from typing import List
 class Solution:
     def numRabbits(self, answers: List[int]) -> int:
         freq = Counter(answers)
-        result = 0
 
+        result = 0
         for num, f in freq.items():
-            max_per_group = num + 1
-            groups = math.ceil(f / max_per_group)
-            result += max_per_group * groups
+            group_size = num + 1
+            groups = math.ceil(f / group_size)
+            result += group_size * groups
 
         return result
 
