@@ -1,4 +1,3 @@
-from collections import Counter
 from typing import List
 
 
@@ -12,24 +11,29 @@ class Solution:
         while left < len(nums) - 1:
             while right < len(nums) - 1 and len(counter) < distinct_elements:
                 right += 1
-                right_element = nums[right]
+                increment_counter(counter, nums[right])
 
-                if right_element in counter:
-                    counter[right_element] += 1
-                else:
-                    counter[right_element] = 1
+            if len(counter) < distinct_elements:
+                break
 
-            if len(counter) == distinct_elements:
-                result += len(nums) - right
-
+            result += len(nums) - right
             left += 1
-            left_element = nums[left]
-            if counter[left_element] == 1:
-                del counter[left_element]
-            else:
-                counter[left_element] -= 1
+            decrement_counter(counter, nums[left])
 
         return result
+
+def increment_counter(counter, element):
+    if element not in counter:
+        counter[element] = 1
+    else:
+        counter[element] += 1
+
+def decrement_counter(counter, element):
+    if counter[element] == 1:
+        del counter[element]
+    else:
+        counter[element] -= 1
+
 
 print(Solution().countCompleteSubarrays([1,3,1,2,2]))
 print(Solution().countCompleteSubarrays([5,5,5,5]))
