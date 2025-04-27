@@ -4,35 +4,28 @@ from typing import List
 
 class Solution:
     def countSubarrays(self, nums: List[int], minK: int, maxK: int) -> int:
-        minQ = deque()
-        maxQ = deque()
-        left = 0
+        mini, maxi, start = -1, -1, -1
         result = 0
 
-        for i in range(len(nums)):
-            num = nums[i]
-
+        for i, num in enumerate(nums):
             if num < minK or num > maxK:
-                minQ.clear()
-                maxQ.clear()
-                left = i + 1
+                mini, maxi, start = -1, -1, i
                 continue
 
-            while minQ and num <= nums[minQ[-1]]:
-                minQ.pop()
-            minQ.append(i)
+            if num == minK:
+                mini = i
 
-            while maxQ and num >= nums[maxQ[-1]]:
-                maxQ.pop()
-            maxQ.append(i)
+            if num == maxK:
+                maxi = i
 
-            if nums[minQ[0]] == minK and nums[maxQ[0]] == maxK:
-                start = min(minQ[0], maxQ[0])
-                result += start - left + 1
+            if mini != -1 and maxi != -1:
+                s = min(mini, maxi)
+                result += s - start
 
         return result
 
 
 print(Solution().countSubarrays([1,3,5,2,7,5], 1, 5))
 print(Solution().countSubarrays([1,1,1,1], 1, 1))
+print(Solution().countSubarrays([4,3], 3, 3))
 
